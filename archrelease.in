@@ -33,6 +33,10 @@ if [[ ! -f PKGBUILD ]]; then
 	die 'archrelease: PKGBUILD not found'
 fi
 
+if [[ ! -f .SRCINFO ]]; then
+	die 'archrelease: .SRCINFO not found'
+fi
+
 mapfile -t known_files < <(git ls-files)
 wait $! || die "failed to discover committed files"
 for file in "${known_files[@]}"; do
@@ -41,13 +45,14 @@ for file in "${known_files[@]}"; do
 	fi
 done
 
-. ./PKGBUILD
-pkgbase=${pkgbase:-$pkgname}
-pkgver=$(get_full_version "$pkgbase")
-
 if git rev-parse "$pkgver" >/dev/null 2>&1; then
 	die "archrelease: the tag $pkgver already exists in the repository!"
 fi
+
+# We source the checked inn PKGBUILD
+. git show HEAD:PKGBUILD
+pkgbase=${pkgbase:-$pkgname}
+pkgver=$(get_full_version "$pkgbase")
 
 stat_busy "Releasing package"
 printf -v tag_list ", %s" "$@"; tag_list="${tag_list#, }"
