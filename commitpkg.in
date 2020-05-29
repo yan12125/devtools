@@ -114,14 +114,23 @@ if [[ -z $server ]]; then
 fi
 
 if [[ -n $(git status -q) ]]; then
-	msgtemplate="upgpkg: $pkgbase $(get_full_version)"
-	# Should we stash the local changes?
-	# Or should we checkout the PKGBUILD from head into tmp
-	# and use printsrcinfo on that?
+	
 	stat_busy 'Creating .SRCINFO'
 	makepkg --printsrcinfo > .SRCINFO
 	git add .SRCINFO
 	stat_done
+
+
+	stat_busy 'Staging files'
+	for f in $(git ls-files -m); do
+		git add "$f"
+	done
+	for f in $(git ls-files -d); do
+		git rm "$f"
+	done
+	stat_done
+
+	msgtemplate="upgpkg: $pkgbase $(get_full_version)"
 	if [[ -n $1 ]]; then
 		stat_busy 'Committing changes'
 		git commit -q -m "${msgtemplate}: ${1}" || die
