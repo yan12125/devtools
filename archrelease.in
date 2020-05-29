@@ -50,9 +50,13 @@ if git rev-parse "$pkgver" >/dev/null 2>&1; then
 fi
 
 # We source the checked inn PKGBUILD
-. git show HEAD:PKGBUILD
+. PKGBUILD
 pkgbase=${pkgbase:-$pkgname}
 pkgver=$(get_full_version "$pkgbase")
+
+if git tag --verify "$pkgver" &> /dev/null; then
+	exit 0
+fi
 
 stat_busy "Releasing package"
 printf -v tag_list ", %s" "$@"; tag_list="${tag_list#, }"

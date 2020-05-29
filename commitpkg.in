@@ -113,13 +113,14 @@ if [[ -z $server ]]; then
 	server='repos.archlinux.org'
 fi
 
-if [[ -n $(git status -q) ]]; then
-	
+if [[ ! -f .SRCINFO ]]; then
 	stat_busy 'Creating .SRCINFO'
 	makepkg --printsrcinfo > .SRCINFO
 	git add .SRCINFO
 	stat_done
+fi
 
+if [[ -n $(git status -s) ]]; then
 
 	stat_busy 'Staging files'
 	for f in $(git ls-files -m); do
