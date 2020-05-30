@@ -175,6 +175,15 @@ for _arch in "${arch[@]}"; do
 			continue 2
 		fi
 		uploads+=("$pkgfile")
+		# This only selects the uploads which intended for this commit
+	#	if [[ -f .REPOINFO ]]; then
+	#		while read -r pkgname designatedRepo; do
+	#			[[ "$_pkgname" == "$pkgname" ]] || continue
+	#			[[ "$repo" == "$designatedRepo" ]] && uploads+=("$pkgfile")
+	#		done < .REPOINFO
+	#	else
+	#		uploads+=("$pkgfile")
+	#	fi
 
 		sigfile="${pkgfile}.sig"
 		if [[ ! -f $sigfile ]]; then
