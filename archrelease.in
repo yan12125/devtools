@@ -54,7 +54,15 @@ fi
 pkgbase=${pkgbase:-$pkgname}
 pkgver=$(get_full_version "$pkgbase")
 
+# If the tag exists we check if it's properly signed and that it
+# matches the working directory PKGBUILD.
 if git tag --verify "$pkgver" &> /dev/null; then
+	cwd_checksum=$(sha256sum PKGBUILD|cut -d' ' -f1)
+	tag_checksum=$(git show $pkgver:PKGBUILD | sha256sum |cut -d' ' -f1)
+	if [[ "$cwd_checksum" != "$tag_checksum" ]]; then
+		die "archrelease: tagged PKGBUILD is not the same as the working dir PKGBUILD!"
+		exit 1
+	fi
 	exit 0
 fi
 
