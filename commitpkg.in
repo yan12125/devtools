@@ -21,6 +21,7 @@ elif [[ -r "$HOME/.makepkg.conf" ]]; then
 fi
 
 cmd=${0##*/}
+cmd=${cmd#git-}
 
 if [[ ! -f PKGBUILD ]]; then
 	die 'No PKGBUILD file'
@@ -32,9 +33,9 @@ source=()
 pkgbase=${pkgbase:-$pkgname}
 
 case "$cmd" in
-	commitpkg)
+	git-commitpkg)
 		if (( $# == 0 )); then
-			die 'Usage: commitpkg <reponame> [-f] [-s server] [-l limit] [-a arch] [commit message]'
+			die 'Usage: git-commitpkg <reponame> [-f] [-s server] [-l limit] [-a arch] [commit message]'
 		fi
 		repo="$1"
 		shift
@@ -43,7 +44,7 @@ case "$cmd" in
 		repo="${cmd%pkg}"
 		;;
 	*)
-		die 'Usage: commitpkg <reponame> [-f] [-s server] [-l limit] [-a arch] [commit message]'
+		die 'Usage: git-commitpkg <reponame> [-f] [-s server] [-l limit] [-a arch] [commit message]'
 		;;
 esac
 
@@ -207,7 +208,7 @@ for _arch in "${arch[@]}"; do
 done
 
 if [[ ${#commit_arches[*]} -gt 0 ]]; then
-	archrelease "${archreleaseopts[@]}" "${commit_arches[@]/#/$repo-}" || die
+	git-archrelease "${archreleaseopts[@]}" "${commit_arches[@]/#/$repo-}" || die
 fi
 
 if [[ ${#uploads[*]} -gt 0 ]]; then
