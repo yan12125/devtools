@@ -110,7 +110,7 @@ if [[ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]]; then
 fi
 
 if [[ -z $server ]]; then
-	server='repos.archlinux.org'
+	server='repos.linderud.dev'
 fi
 
 if [[ ! -f .SRCINFO ]]; then
