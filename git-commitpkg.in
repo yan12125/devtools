@@ -132,10 +132,12 @@ if [[ -n $(git status -s) ]]; then
 	done
 	stat_done
 
-	msgtemplate="upgpkg: $pkgbase $(get_full_version)"
+	pkgver="$(get_full_version)"
+	tag_pkgver=release-${pkgver/:/-}
+	msgtemplate="upgpkg: $pkgbase ${tag_pkgver}"
 	if [[ -n $1 ]]; then
 		stat_busy 'Committing changes'
-		git commit -q -m "${msgtemplate}: ${1}" || die
+		git commit -v -q -m "${msgtemplate}: ${1}" || die
 		stat_done
 	else
 		msgfile="$(mktemp)"
