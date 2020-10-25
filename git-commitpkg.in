@@ -32,6 +32,12 @@ source=()
 . ./PKGBUILD
 pkgbase=${pkgbase:-$pkgname}
 
+if is_debug_pkg; then
+	for pkg in "${pkgname[@]}"; do
+		pkgname+=("${pkg}-debug")
+	done
+fi
+
 case "$cmd" in
 	git-commitpkg)
 		if (( $# == 0 )); then

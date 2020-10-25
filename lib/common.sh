@@ -184,3 +184,10 @@ find_cached_package() {
 			return 1
 	esac
 }
+
+is_debug_pkg(){
+	if check_option "debug" "y" && check_option "strip" "y"; then
+		return 0
+	fi
+	return 1
+}
