@@ -117,7 +117,7 @@ if [[ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]]; then
 fi
 
 if [[ -z $server ]]; then
-	server='repos.linderud.dev'
+	server='svn2gittest.archlinux.org'
 fi
 
 if [[ ! -f .SRCINFO ]]; then
