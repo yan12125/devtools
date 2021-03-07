@@ -138,8 +138,8 @@ if [[ -n $(git status -s) ]]; then
 	done
 	stat_done
 
-	pkgver="$(get_full_version)"
-	tag_pkgver=release-${pkgver/:/-}
+	full_version="$(get_full_version)"
+	tag_pkgver=release-${full_version/:/-}
 	msgtemplate="upgpkg: $pkgbase ${tag_pkgver}"
 	if [[ -n $1 ]]; then
 		stat_busy 'Committing changes'
